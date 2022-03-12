@@ -47,6 +47,11 @@ let apple = {
     position: initPosition(),
 }
 
+let hearts = {
+    total: 3,
+}
+
+
 function drawCell(ctx, x, y, color) {
     ctx.fillStyle = color;
     ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
@@ -83,6 +88,14 @@ function draw() {
             drawCell(ctx, snake2.body[i].x, snake2.body[i].y, snake2.color);
         }
         drawCell(ctx, apple.position.x, apple.position.y, apple.color);
+        
+        var heartImg = document.getElementById("heart");
+        for (let i = 0; i < hearts.total; i++) {
+            ctx.drawImage(heartImg, CELL_SIZE * i, 1, CELL_SIZE, CELL_SIZE);
+        }
+        // ctx.drawImage(heartImg, 0, 1, CELL_SIZE, CELL_SIZE);
+        // ctx.drawImage(heartImg, CELL_SIZE, 1, CELL_SIZE, CELL_SIZE);
+        // ctx.drawImage(heartImg, 2 * CELL_SIZE, 1, CELL_SIZE, CELL_SIZE);
 
         drawScore(snake1);
         drawScore(snake2);
@@ -149,9 +162,14 @@ function checkCollision(snakes) {
         }
     }
     if (isCollide) {
-        alert("Game over");
-        snake1 = initSnake("purple");
-        snake2 = initSnake("blue");
+        if (hearts.total > 0){
+            hearts.total--;
+        }
+        else{
+            alert("Game over");
+            snake1 = initSnake("purple");
+            snake2 = initSnake("blue");
+        }
     }
     return isCollide;
 }
