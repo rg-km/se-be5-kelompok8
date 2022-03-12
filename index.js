@@ -78,10 +78,10 @@ function draw() {
         for (let i = 1; i < snake1.body.length; i++) {
             drawCell(ctx, snake1.body[i].x, snake1.body[i].y, snake1.color);
         }
-        drawCell(ctx, snake2.head.x, snake2.head.y, snake2.color);
-        for (let i = 1; i < snake2.body.length; i++) {
-            drawCell(ctx, snake2.body[i].x, snake2.body[i].y, snake2.color);
-        }
+        // drawCell(ctx, snake2.head.x, snake2.head.y, snake2.color);
+        // for (let i = 1; i < snake2.body.length; i++) {
+        //     drawCell(ctx, snake2.body[i].x, snake2.body[i].y, snake2.color);
+        // }
         drawCell(ctx, apple.position.x, apple.position.y, apple.color);
 
         drawScore(snake1);
@@ -223,7 +223,7 @@ document.addEventListener("keydown", function (event) {
 
 function initGame() {
     move(snake1);
-    move(snake2);
+    // move(snake2);
 }
 
 initGame();
