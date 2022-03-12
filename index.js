@@ -9,7 +9,7 @@ const DIRECTION = {
     UP: 2,
     DOWN: 3,
 }
-const MOVE_INTERVAL = 150;
+const MOVE_INTERVAL = 80;
 
 function initPosition() {
     return {
@@ -72,6 +72,42 @@ function drawScore(snake) {
     scoreCtx.fillText(snake.score, 10, scoreCanvas.scrollHeight / 2);
 }
 
+function drawLine(ctx){
+    ctx.lineWidth = 4;
+    ctx.moveTo(300, 40);
+    ctx.lineTo(300, 560);
+    ctx.stroke();
+}
+
+// function obstacle(width, height, x, y, ctx) {
+//     this.width = width;
+//     this.height = height; 
+//     this.x = x;
+//     this.y = y;
+//     ctx.fillStyle = "black";    
+//     ctx.fillRect(this.x, this.y, this.width, this.height);
+//     this.newPos = function() {
+//         this.x += this.speedX;
+//         this.y += this.speedY;        
+//     }    
+
+//     this.crashWith = function(level_2) {
+//         var myleft = this.x;
+//         var myright = this.x + (this.width);
+//         var mytop = this.y;
+//         var mybottom = this.y + (this.height);
+//         var otherleft = level_2.x;
+//         var otherright = level_2.x + (level_2.width);
+//         var othertop = level_2.y;
+//         var otherbottom = level_2.y + (level_2.height);
+//         var crash = true;
+//         if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+//             crash = false;
+//         }
+//         return crash;
+//     }
+// }
+
 function draw() {
     setInterval(function() {
         let snakeCanvas = document.getElementById("snakeBoard");
@@ -96,7 +132,8 @@ function draw() {
         // ctx.drawImage(heartImg, 0, 1, CELL_SIZE, CELL_SIZE);
         // ctx.drawImage(heartImg, CELL_SIZE, 1, CELL_SIZE, CELL_SIZE);
         // ctx.drawImage(heartImg, 2 * CELL_SIZE, 1, CELL_SIZE, CELL_SIZE);
-
+        //drawLine(ctx);
+        // level_2 = new obstacle(4, 520, 300, 40, ctx);
         drawScore(snake1);
         drawScore(snake2);
     }, REDRAW_INTERVAL);
@@ -149,6 +186,19 @@ function moveUp(snake) {
     eat(snake, apple);
 }
 
+function calcCollison(obstacle, snakes){
+    var otherleft = obstacle.x;
+    var otherright = obstacle.x + (obstacle.width);
+    var othertop = obstacle.y;
+    var otherbottom = obstacle.y + (obstacle.height);
+    var crash = true;
+
+    if ((snakes.head.y == othertop) || (snakes.head.y == otherbottom) || (snakes.head.x == otherleft) || (snakes.head.x == otherright)) {
+        crash = true;
+    }
+    return crash;
+}
+
 function checkCollision(snakes) {
     let isCollide = false;
     //this
@@ -161,6 +211,9 @@ function checkCollision(snakes) {
             }
         }
     }
+
+    // isCollide = calcCollison(level_2, snakes);
+
     if (isCollide) {
         if (hearts.total > 0){
             hearts.total--;
@@ -169,6 +222,7 @@ function checkCollision(snakes) {
             alert("Game over");
             snake1 = initSnake("purple");
             snake2 = initSnake("blue");
+            hearts.total = 3;
         }
     }
     return isCollide;
@@ -197,6 +251,13 @@ function move(snake) {
     } else {
         initGame();
     }
+    // if (!checkCollision(snake1)) {
+    //     setTimeout(function() {
+    //         move(snake);
+    //     }, MOVE_INTERVAL);
+    // } else {
+    //     initGame();
+    // }
 }
 
 function moveBody(snake) {
