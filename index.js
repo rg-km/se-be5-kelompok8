@@ -217,6 +217,9 @@ function checkCollision(snakes) {
     if (isCollide) {
         if (hearts.total > 0){
             hearts.total--;
+            var tempScore = snake1.score;
+            snake1 = initSnake("purple");
+            snake1.score = tempScore;
         }
         else{
             alert("Game over");
