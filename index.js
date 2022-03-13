@@ -42,13 +42,18 @@ function initSnake(color) {
 let snake1 = initSnake("purple");
 let snake2 = initSnake("blue");
 
+// let level = 1;
 let apple = {
     color: "red",
     position: initPosition(),
 }
 
+let isPrime = true;
+
 let hearts = {
     total: 3,
+    position: initPosition(),
+    toggle: false,
 }
 
 
@@ -72,12 +77,12 @@ function drawScore(snake) {
     scoreCtx.fillText(snake.score, 10, scoreCanvas.scrollHeight / 2);
 }
 
-function drawLine(ctx){
-    ctx.lineWidth = 4;
-    ctx.moveTo(300, 40);
-    ctx.lineTo(300, 560);
-    ctx.stroke();
-}
+// function drawLine(ctx){
+//     ctx.lineWidth = 4;
+//     ctx.moveTo(300, 40);
+//     ctx.lineTo(300, 560);
+//     ctx.stroke();
+// }
 
 // function obstacle(width, height, x, y, ctx) {
 //     this.width = width;
@@ -108,6 +113,21 @@ function drawLine(ctx){
 //     }
 // }
 
+function drawHeart(ctx){
+    var heartImg = document.getElementById("heart");
+    if (snake1.score >= 5){
+        if (isPrime){
+            ctx.drawImage(heartImg, hearts.position.x * CELL_SIZE, hearts.position.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+            hearts.toggle = true;
+        }
+        else{
+            drawCell(ctx, hearts.position.x, hearts.position.y, "white");
+            //hearts.position = initPosition();
+            hearts.toggle = false;
+        }
+    }
+}
+
 function draw() {
     setInterval(function() {
         let snakeCanvas = document.getElementById("snakeBoard");
@@ -129,11 +149,14 @@ function draw() {
         for (let i = 0; i < hearts.total; i++) {
             ctx.drawImage(heartImg, CELL_SIZE * i, 1, CELL_SIZE, CELL_SIZE);
         }
+        drawHeart(ctx);
+
         // ctx.drawImage(heartImg, 0, 1, CELL_SIZE, CELL_SIZE);
         // ctx.drawImage(heartImg, CELL_SIZE, 1, CELL_SIZE, CELL_SIZE);
         // ctx.drawImage(heartImg, 2 * CELL_SIZE, 1, CELL_SIZE, CELL_SIZE);
         //drawLine(ctx);
         // level_2 = new obstacle(4, 520, 300, 40, ctx);
+
         drawScore(snake1);
         drawScore(snake2);
     }, REDRAW_INTERVAL);
@@ -159,45 +182,81 @@ function eat(snake, apple) {
         apple.position = initPosition();
         snake.score++;
         snake.body.push({x: snake.head.x, y: snake.head.y});
+        if (snake1.score >= 5){
+           isPrime = checkPrime(snake1.score);
+        }
     }
+}
+
+function eatHeart(snake, hearts){
+    if(hearts.toggle){
+        if (snake.head.x == hearts.position.x && snake.head.y == hearts.position.y){
+            hearts.position = initPosition();
+            apple.position = initPosition();
+            snake.score++;
+            hearts.total++;
+            isPrime = checkPrime(snake.score);
+        }
+    }
+}
+
+function checkPrime(score){
+    isPrime = true;
+    if (score == 0 || score == 1){
+        isPrime = false;
+    }
+    else if (score >= 2){
+        for (let i = 2; i < score; i++) {
+            if (score % i == 0) {
+                isPrime = false;
+                break;
+            }
+        }    
+    }
+    //console.log(isPrime);
+    return isPrime;
 }
 
 function moveLeft(snake) {
     snake.head.x--;
     teleport(snake);
     eat(snake, apple);
+    eatHeart(snake, hearts);
 }
 
 function moveRight(snake) {
     snake.head.x++;
     teleport(snake);
     eat(snake, apple);
+    eatHeart(snake, hearts);
 }
 
 function moveDown(snake) {
     snake.head.y++;
     teleport(snake);
     eat(snake, apple);
+    eatHeart(snake, hearts);
 }
 
 function moveUp(snake) {
     snake.head.y--;
     teleport(snake);
     eat(snake, apple);
+    eatHeart(snake, hearts);
 }
 
-function calcCollison(obstacle, snakes){
-    var otherleft = obstacle.x;
-    var otherright = obstacle.x + (obstacle.width);
-    var othertop = obstacle.y;
-    var otherbottom = obstacle.y + (obstacle.height);
-    var crash = true;
+// function calcCollison(obstacle, snakes){
+//     var otherleft = obstacle.x;
+//     var otherright = obstacle.x + (obstacle.width);
+//     var othertop = obstacle.y;
+//     var otherbottom = obstacle.y + (obstacle.height);
+//     var crash = true;
 
-    if ((snakes.head.y == othertop) || (snakes.head.y == otherbottom) || (snakes.head.x == otherleft) || (snakes.head.x == otherright)) {
-        crash = true;
-    }
-    return crash;
-}
+//     if ((snakes.head.y == othertop) || (snakes.head.y == otherbottom) || (snakes.head.x == otherleft) || (snakes.head.x == otherright)) {
+//         crash = true;
+//     }
+//     return crash;
+// }
 
 function checkCollision(snakes) {
     let isCollide = false;
