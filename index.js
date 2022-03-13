@@ -43,10 +43,17 @@ let snake1 = initSnake("purple");
 let snake2 = initSnake("blue");
 
 // let level = 1;
-let apple = {
-    color: "red",
+// let apple = {
+//     color: "red",
+//     position: initPosition(),
+// }
+
+let apple = [{
     position: initPosition(),
-}
+},
+{
+    position: initPosition(),
+}]
 
 let isPrime = true;
 
@@ -143,7 +150,7 @@ function draw() {
         // for (let i = 1; i < snake2.body.length; i++) {
         //     drawCell(ctx, snake2.body[i].x, snake2.body[i].y, snake2.color);
         // }
-        drawCell(ctx, apple.position.x, apple.position.y, apple.color);
+        // drawCell(ctx, apple.position.x, apple.position.y, apple.color);
         
         var heartImg = document.getElementById("heart");
         for (let i = 0; i < hearts.total; i++) {
@@ -151,9 +158,12 @@ function draw() {
         }
         drawHeart(ctx);
 
-        // ctx.drawImage(heartImg, 0, 1, CELL_SIZE, CELL_SIZE);
-        // ctx.drawImage(heartImg, CELL_SIZE, 1, CELL_SIZE, CELL_SIZE);
-        // ctx.drawImage(heartImg, 2 * CELL_SIZE, 1, CELL_SIZE, CELL_SIZE);
+        for (let i = 0; i < apple.length; i++) {
+            let apples = apple[i];
+            var img = document.getElementById("apple");
+            ctx.drawImage(img, apples.position.x * CELL_SIZE, apples.position.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        }
+       
         //drawLine(ctx);
         // level_2 = new obstacle(4, 520, 300, 40, ctx);
 
@@ -178,15 +188,21 @@ function teleport(snake) {
 }
 
 function eat(snake, apple) {
-    if (snake.head.x == apple.position.x && snake.head.y == apple.position.y) {
-        apple.position = initPosition();
-        snake.score++;
-        snake.body.push({x: snake.head.x, y: snake.head.y});
-        if (snake1.score >= 5){
-           isPrime = checkPrime(snake1.score);
+    for (let i = 0; i < apple.length; i++) {
+        let apples = apple[i];
+        if (snake.head.x == apples.position.x && snake.head.y == apples.position.y) {
+            apples.position = initPosition();
+            snake.score++;
+            snake.body.push({x: snake.head.x, y: snake.head.y});
+            if (snake1.score >= 5){
+               isPrime = checkPrime(snake1.score);
+            }
         }
     }
 }
+
+
+
 
 function eatHeart(snake, hearts){
     if(hearts.toggle){
