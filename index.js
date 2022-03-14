@@ -135,22 +135,30 @@ function drawHeart(ctx){
     }
 }
 
+function drawSnake(ctx, snake1){
+    var snakeHeadImg = document.getElementById("snake-head");
+    var snakeBodyImg = document.getElementById("snake-body");
+
+    ctx.drawImage(snakeHeadImg, snake1.head.x, snake1.head.y, CELL_SIZE, CELL_SIZE);
+    for (let i = 1; i < snake1.body.length; i++) {
+        var snakeBodyImg = document.getElementById("snake-body");
+        ctx.drawImage(snakeBodyImg, snake1.body[i].x, snake1.body[i].y, CELL_SIZE, CELL_SIZE);
+    }
+}
+
 function draw() {
     setInterval(function() {
         let snakeCanvas = document.getElementById("snakeBoard");
         let ctx = snakeCanvas.getContext("2d");
 
         ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-        
-        drawCell(ctx, snake1.head.x, snake1.head.y, snake1.color);
+
+        var snakeHeadImg = document.getElementById("snake-head");
+        ctx.drawImage(snakeHeadImg, snake1.head.x * CELL_SIZE, snake1.head.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
         for (let i = 1; i < snake1.body.length; i++) {
-            drawCell(ctx, snake1.body[i].x, snake1.body[i].y, snake1.color);
+            var snakeBodyImg = document.getElementById("snake-body");
+            ctx.drawImage(snakeBodyImg, snake1.body[i].x * CELL_SIZE, snake1.body[i].y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
         }
-        // drawCell(ctx, snake2.head.x, snake2.head.y, snake2.color);
-        // for (let i = 1; i < snake2.body.length; i++) {
-        //     drawCell(ctx, snake2.body[i].x, snake2.body[i].y, snake2.color);
-        // }
-        // drawCell(ctx, apple.position.x, apple.position.y, apple.color);
         
         var heartImg = document.getElementById("heart");
         for (let i = 0; i < hearts.total; i++) {
@@ -163,9 +171,6 @@ function draw() {
             var img = document.getElementById("apple");
             ctx.drawImage(img, apples.position.x * CELL_SIZE, apples.position.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
         }
-       
-        //drawLine(ctx);
-        // level_2 = new obstacle(4, 520, 300, 40, ctx);
 
         drawScore(snake1);
         drawScore(snake2);
@@ -200,8 +205,6 @@ function eat(snake, apple) {
         }
     }
 }
-
-
 
 
 function eatHeart(snake, hearts){
