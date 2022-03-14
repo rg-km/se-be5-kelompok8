@@ -1,5 +1,5 @@
 const CELL_SIZE = 20;
-const CANVAS_SIZE = 600;
+const CANVAS_SIZE = 500;
 const REDRAW_INTERVAL = 50;
 const WIDTH = CANVAS_SIZE / CELL_SIZE;
 const HEIGHT = CANVAS_SIZE / CELL_SIZE;
@@ -387,7 +387,6 @@ document.addEventListener("keydown", function (event) {
 
 function initGame() {
     move(snake1);
-    // move(snake2);
 }
 
 initGame();
