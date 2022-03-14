@@ -12,6 +12,9 @@ const DIRECTION = {
 
 let MOVE_INTERVAL = 85;
 
+var levelUpAudio = new Audio('assets/level-up.mp3');
+var gameOverAudio = new Audio('assets/game-over.mp3');
+
 function initPosition() {
     return {
         x: Math.floor(Math.random() * WIDTH),
@@ -91,41 +94,6 @@ function drawLevel() {
     levelCtx.fillText(level, 10, levelCanvas.scrollHeight / 2);
 }
 
-// function drawLine(ctx){
-//     ctx.lineWidth = 4;
-//     ctx.moveTo(300, 40);
-//     ctx.lineTo(300, 560);
-//     ctx.stroke();
-// }
-
-// function obstacle(width, height, x, y, ctx) {
-//     this.width = width;
-//     this.height = height; 
-//     this.x = x;
-//     this.y = y;
-//     ctx.fillStyle = "black";    
-//     ctx.fillRect(this.x, this.y, this.width, this.height);
-//     this.newPos = function() {
-//         this.x += this.speedX;
-//         this.y += this.speedY;        
-//     }    
-
-//     this.crashWith = function(level_2) {
-//         var myleft = this.x;
-//         var myright = this.x + (this.width);
-//         var mytop = this.y;
-//         var mybottom = this.y + (this.height);
-//         var otherleft = level_2.x;
-//         var otherright = level_2.x + (level_2.width);
-//         var othertop = level_2.y;
-//         var otherbottom = level_2.y + (level_2.height);
-//         var crash = true;
-//         if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
-//             crash = false;
-//         }
-//         return crash;
-//     }
-// }
 
 function drawHeart(ctx){
     var heartImg = document.getElementById("heart");
@@ -146,6 +114,7 @@ function checkLevel(score){
     if (score > 0){
         if (score % 5 == 0){
             level++;
+            levelUpAudio.play();
             if (level >= 6){
                 alert("Thanks For Playing!");
                 snake1 = initSnake("purple");
@@ -320,6 +289,7 @@ function checkCollision(snakes) {
         }
         else{
             alert("Game over");
+            gameOverAudio.play();
             snake1 = initSnake("purple");
             // snake2 = initSnake("blue");
             hearts.total = 3;
